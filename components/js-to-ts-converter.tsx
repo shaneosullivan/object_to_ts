@@ -48,6 +48,13 @@ export function JsToTsConverter() {
         </div>
       </header>
       <main className="flex-1">
+        <a
+          href="https://github.com/shaneosullivan/object_to_ts"
+          target="blank"
+          className="fixed top-1 right-1"
+        >
+          <img src="/github-mark.svg" style={{ height: "36px" }} />
+        </a>
         <div className="flex flex-row w-full h-full gap-2">
           <div className="flex flex-col flex-1">
             <Textarea
