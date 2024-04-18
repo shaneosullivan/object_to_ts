@@ -7,7 +7,10 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "JS To TS Converter",
-  description: "Convert JavaScript objects to Typescript types",
+  description: "Convert JavaScript/JSON objects to Typescript types",
+  authors: { url: "https://chofter.com", name: "Shane O'Sullivan" },
+  applicationName: "JS To TS Converter",
+  keywords: ["Typescript", "Javascript", "JSON", "convert", "types"],
 };
 
 export default function RootLayout({
