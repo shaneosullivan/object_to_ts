@@ -40,7 +40,7 @@ export function JsToTsConverter() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-r from-[#FF6B6B] to-[#FFD166] p-4">
+    <div className="flex flex-col h-screen bg-gradient-to-r from-[#FF6B6B] to-[#FFD166] p-4 max-h-dvh">
       <header className="flex items-center">
         <div className="p-0">
           <h1 className="text-xl sm:text-2xl font-semibold text-white">
