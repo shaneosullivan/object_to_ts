@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   keywords: ["Typescript", "Javascript", "JSON", "convert", "types"],
 };
 
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,6 +24,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <link rel="icon" href="/favicon_ts.ico" sizes="any" />
+        <meta
+          name="google-site-verification"
+          content={googleSiteVerification}
+        />
         {children}
       </body>
     </html>
