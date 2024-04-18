@@ -24,10 +24,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <link rel="icon" href="/favicon_ts.ico" sizes="any" />
-        <meta
-          name="google-site-verification"
-          content={googleSiteVerification}
-        />
+        {googleSiteVerification ? (
+          <meta
+            name="google-site-verification"
+            content={googleSiteVerification}
+          />
+        ) : null}
         {children}
       </body>
     </html>
