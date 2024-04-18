@@ -67,7 +67,7 @@ function getBasicType(value: any): string | null {
   } else if (value instanceof Date) {
     type = "Date";
   } else if (value === null || value === undefined) {
-    type = "any";
+    type = "unknown";
   } else if (typeof value === "function") {
     type = "(...args: unknown[]) => unknown";
   }

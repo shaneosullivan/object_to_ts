@@ -87,3 +87,9 @@ it("should create an object containing an Array with an object", () => {
   }>;
 }`);
 });
+
+it("should create an object containing an unknown type", () => {
+  expect(convertToTs({ a: null })).toBe(`{
+  a: unknown;
+}`);
+});
