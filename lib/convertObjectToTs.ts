@@ -29,7 +29,7 @@ function getObjectType(obj: Record<string, any>, spaceCount = 0): string {
 
       let type = convertToTs(value, spaceCount + 2);
 
-      return `${key}: ${type}`;
+      return `${optionallyWrapObjectKey(key)}: ${type}`;
     })
     .map((line) => spaces + "  " + line + ";");
 
@@ -73,4 +73,15 @@ function getBasicType(value: any): string | null {
   }
 
   return type;
+}
+
+function optionallyWrapObjectKey(key: string) {
+  if (isValidObjectKey(key)) {
+    return key;
+  }
+  return `["${key}"]`;
+}
+
+function isValidObjectKey(key: string) {
+  return /^[a-zA-Z_][a-zA-Z_0-9]*$/.test(key);
 }
