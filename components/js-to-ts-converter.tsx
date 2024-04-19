@@ -7,7 +7,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { ClipboardEventHandler, DragEvent, useState } from "react";
 import { convertToTs } from "@/lib/convertObjectToTs";
 import JSON5 from "json5";
 import { copyToClipboard } from "@/lib/copyToClipboard";
@@ -18,15 +18,16 @@ import ExternalLinkIcon from "./ui/ExternalLinkIcon";
 export function JsToTsConverter() {
   const [sourceValue, setSourceValue] = useState("");
   const [resultValue, setResultValue] = useState("");
+  const [isDropOver, setIsDropOver] = useState(false);
 
-  function doConversion() {
-    if (!sourceValue || !sourceValue.trim()) {
+  function doConversion(source: string) {
+    if (!source || !source.trim()) {
       setResultValue("");
       return;
     }
     try {
       // A more relaxed version of JSON parsing, doesn't require quotes around keys.
-      const value = JSON5.parse(sourceValue);
+      const value = JSON5.parse(source);
       const tsValue = convertToTs(value);
       setResultValue(tsValue);
     } catch (err) {
@@ -39,8 +40,64 @@ export function JsToTsConverter() {
     toast.success("Copied to clipboard!");
   }
 
+  function handleDragOver(evt: DragEvent<HTMLDivElement>) {
+    evt.preventDefault();
+
+    if (!isDropOver) {
+      setIsDropOver(true);
+    }
+  }
+
+  function handleDragExit(evt: DragEvent<HTMLDivElement>) {
+    evt.preventDefault();
+    setIsDropOver(false);
+  }
+
+  function handleDrop(evt: DragEvent<HTMLDivElement>) {
+    evt.preventDefault();
+    setIsDropOver(false);
+
+    const textFiles = getValidFiles(evt);
+
+    if (textFiles.length > 0) {
+      const reader = new FileReader();
+      reader.readAsText(textFiles[0]);
+      reader.addEventListener("load", () => {
+        const content = reader.result ? reader.result.toString() : "";
+        setSourceValue(content);
+        doConversion(content);
+      });
+    } else {
+      toast.info("File drop failed");
+    }
+  }
+
+  function handlePaste(evt: any) {
+    evt.preventDefault();
+    const value = evt.clipboardData.getData("text/plain") || "";
+    setSourceValue(value);
+    doConversion(value);
+  }
+
+  function getValidFiles(evt: DragEvent<HTMLDivElement>) {
+    const files = Array.from(evt.dataTransfer?.files || []);
+    const textFiles = files.filter((file) => {
+      return (
+        file.type === "text/plain" ||
+        file.type === "text/json" ||
+        file.type === "application/json"
+      );
+    });
+    return textFiles;
+  }
+
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-r from-[#FF6B6B] to-[#FFD166] p-4 max-h-dvh">
+    <div
+      className="flex flex-col h-screen bg-gradient-to-r from-[#FF6B6B] to-[#FFD166] p-4 max-h-dvh"
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onDragLeave={handleDragExit}
+    >
       <header className="flex items-center">
         <div className="p-0">
           <h1 className="text-xl sm:text-2xl font-semibold text-white">
@@ -69,8 +126,19 @@ export function JsToTsConverter() {
           <div className="flex flex-col flex-1">
             <Textarea
               className="flex-1 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300"
-              placeholder="Paste your JSON here."
+              placeholder="Paste your JSON here or drop a .json file"
               onChange={(evt) => setSourceValue(evt.target.value)}
+              onPaste={handlePaste}
+              style={
+                isDropOver
+                  ? {
+                      backgroundImage: `url(/drop_icon.webp)`,
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "100px",
+                    }
+                  : undefined
+              }
               value={sourceValue}
             />
           </div>
@@ -78,7 +146,7 @@ export function JsToTsConverter() {
             <div className="flex flex-row sm:flex-col gap-2">
               <Button
                 className="bg-yellow-400 text-zinc-500 hover:bg-yellow-500 dark:bg-yellow-600 dark:text-gray-900 dark:hover:bg-yellow-700"
-                onClick={doConversion}
+                onClick={() => doConversion(sourceValue)}
                 disabled={!(sourceValue || "").trim()}
               >
                 Convert
