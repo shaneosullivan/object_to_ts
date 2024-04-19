@@ -35,8 +35,8 @@ export function JsToTsConverter() {
     }
   }
 
-  function doCopy() {
-    copyToClipboard(resultValue);
+  function doCopy(value: string) {
+    copyToClipboard(value);
     toast.success("Copied to clipboard!");
   }
 
@@ -63,9 +63,10 @@ export function JsToTsConverter() {
       const reader = new FileReader();
       reader.readAsText(textFiles[0]);
       reader.addEventListener("load", () => {
-        const content = reader.result ? reader.result.toString() : "";
-        setSourceValue(content);
-        doConversion(content);
+        const value = reader.result ? reader.result.toString() : "";
+        setSourceValue(value);
+        doConversion(value);
+        doCopy(value);
       });
     } else {
       toast.info("File drop failed");
@@ -77,6 +78,7 @@ export function JsToTsConverter() {
     const value = evt.clipboardData.getData("text/plain") || "";
     setSourceValue(value);
     doConversion(value);
+    doCopy(value);
   }
 
   function getValidFiles(evt: DragEvent<HTMLDivElement>) {
@@ -172,7 +174,7 @@ export function JsToTsConverter() {
             {resultValue ? (
               <Button
                 className="absolute top-1 right-1"
-                onClick={() => doCopy()}
+                onClick={() => doCopy(resultValue)}
               >
                 Copy
               </Button>
