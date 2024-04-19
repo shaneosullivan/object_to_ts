@@ -30,9 +30,11 @@ export function JsToTsConverter() {
       const value = JSON5.parse(source);
       const tsValue = convertToTs(value);
       setResultValue(tsValue);
+      return tsValue;
     } catch (err) {
       toast.error("Error: Invalid JSON", {});
     }
+    return null;
   }
 
   function doCopy(value: string) {
@@ -65,8 +67,11 @@ export function JsToTsConverter() {
       reader.addEventListener("load", () => {
         const value = reader.result ? reader.result.toString() : "";
         setSourceValue(value);
-        doConversion(value);
-        doCopy(value);
+        const tsValue = doConversion(value);
+
+        if (tsValue) {
+          doCopy(tsValue);
+        }
       });
     } else {
       toast.info("File drop failed");
@@ -77,8 +82,10 @@ export function JsToTsConverter() {
     evt.preventDefault();
     const value = evt.clipboardData.getData("text/plain") || "";
     setSourceValue(value);
-    doConversion(value);
-    doCopy(value);
+    const tsValue = doConversion(value);
+    if (tsValue) {
+      doCopy(tsValue);
+    }
   }
 
   function getValidFiles(evt: DragEvent<HTMLDivElement>) {
