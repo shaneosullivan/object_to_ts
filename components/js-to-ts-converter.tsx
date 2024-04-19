@@ -7,7 +7,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ClipboardEventHandler, DragEvent, useState } from "react";
+import { DragEvent, useState } from "react";
 import { convertToTs } from "@/lib/convertObjectToTs";
 import JSON5 from "json5";
 import { copyToClipboard } from "@/lib/copyToClipboard";
