@@ -6,10 +6,10 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "JS To TS Converter",
+  title: "JSON To TS Converter",
   description: "Convert JavaScript/JSON objects to Typescript types",
   authors: { url: "https://chofter.com", name: "Shane O'Sullivan" },
-  applicationName: "JS To TS Converter",
+  applicationName: "JSON To TS Converter",
   keywords: ["Typescript", "Javascript", "JSON", "convert", "types"],
 };
 
